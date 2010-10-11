@@ -1,0 +1,106 @@
+#!/bin/bash
+#Description: Instala lo basico en ubuntu 10.10
+#		Manejo de bash con uso de interfaz Genome-GTK con zenity, más info:
+#		http://library.gnome.org/users/zenity/stable/zenity-message-options.html.es#zenity-error-dialog
+#
+#
+#basado en: "Lo Basico Despues de instalar Ubuntu 10.10"
+#		http://www.nierox.com/2010/10/lo-basico-despues-de-instalar-ubuntu-10-10/
+#
+
+
+#seleción de idioma
+langselect=`zenity --title="Seleccione su idioma" --width=370 --height=180 \
+                            --text="Select:" \
+                            --list --column="Selected" --column="Language" \
+                            --radiolist TRUE Spanish FALSE English `
+
+if [ $? -eq 0 ];
+then
+        IFS="|"
+        for langSselect in $langselect
+        do
+               if [ "$langSselect" = "English" ];
+                     then 
+                     YOURLANG="languages/en.pot"
+               elif [ "$langSselect" = "Spanish" ];
+                     then
+                     YOURLANG="languages/es.pot"                     
+               fi
+        done
+        IFS=""
+else
+        echo cancel selected
+        exit
+fi
+
+LANGFILE=$(cat $YOURLANG)
+
+n=1
+while read curline; do
+	export I18N$n="$curline" #> /dev/null 2>&1
+	let n=n+1
+done < $YOURLANG
+
+choicess=`/usr/bin/zenity --title="$I18N1" --width=500 --height=450 \
+                          --text="$I18N5" \
+                         --list --column="$I18N6" --column="$I18N7" \
+                         --checklist TRUE "$I18N8" TRUE "$I18N9" TRUE "$I18N10" TRUE "$I18N11" TRUE "$I18N12" TRUE "$I18N13" TRUE "$I18N14" TRUE "$I18N15" TRUE "$I18N16" TRUE "$I18N17" TRUE "$I18N18" TRUE "$I18N19" `
+
+#Requiere de una conexion a internet para poder continuar, intentamos acceder a google con wget
+testconnection=`wget --tries=3 --timeout=15 www.google.com -O /tmp/testinternet &>/dev/null 2>&1`
+if [ $? != 0 ];
+then
+	zenity --error --title="$I18N1"  --text="$I18N3"
+else
+	zenity --info --title="$I18N1"  --text="$I18N4"
+fi
+
+#Detectando si es super usuario
+if [ `id -g` -ne 0 ]
+then
+  zenity --error --title="$I18N1"  --text="$I18N2"
+  exit 1
+fi
+
+
+##### Lo demas son puros installs a partir de las opciones:
+#esto se instala x defecto?
+aptitude install build-essential
+
+#Codecs Multimedia GStreamer
+apt-get install faad gstreamer0.10-ffmpeg gstreamer0.10-plugins-bad gstreamer0.10-plugins-bad-multiverse gstreamer0.10-plugins-ugly gstreamer0.10-plugins-ugly-multiverse gstreamer0.10-pitfdll
+
+#Fuentes de Microsoft
+apt-get install msttcorefonts
+fc-cache
+
+#Efectos Generales Compiz Fusion
+sudo apt-get install compizconfig-settings-manager
+
+#Emesene [ mensajería instantánea ]
+apt-get install emesene
+
+#Amsn [ mensajería instantánea ]
+apt-get install amsn
+
+#Vlc [ Reproductor de vídeo ]
+apt-get install vlc
+
+#Mplayer [ Reproductor de vídeo ]
+apt-get install mplayer
+
+#RAR [ Soporte para descomprimir archivos RAR ]
+apt-get install rar
+
+#Inkscape [ manipulador de gráficos ]
+apt-get install inkscape
+
+#Banshee [ Reproductor de musica ]
+apt-get install banshee
+
+#Xchat [ cliente de IRC ]
+apt-get install xchat
+
+#GIMP [ edito de imagenes ]
+apt-get install gimp

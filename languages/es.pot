@@ -1,0 +1,19 @@
+Lo Básico Después de instalar Ubuntu 10.10
+Error: Requiere permisos de super usuario
+Error: Requiere de una conexion a Internet
+Su conexion a Internet fue probada con exito
+Seleccione los paquetes a instalar
+Opción
+Descripción
+Codecs Multimedia GStreamer
+Fuentes de Microsoft
+Efectos Generales Compiz Fusión
+Emesene [ mensajería instantánea ]
+Amsn [ mensajería instantánea ]
+Vlc [ Reproductor de vídeo ]
+Mplayer [ Reproductor de vídeo ]
+RAR [ Soporte para descomprimir archivos RAR ]
+Inkscape [ manipulador de gráficos ]
+Banshee [ Reproductor de música ]
+Xchat [ cliente de IRC ]
+GIMP [ edito de imágenes ]

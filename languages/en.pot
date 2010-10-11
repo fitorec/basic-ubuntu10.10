@@ -1,0 +1,19 @@
+Basics After installing Ubuntu 10.10
+Error: Requires superuser permissions
+Error: Requires internet connection
+Your Internet connection was tested successfully
+Select packages to install
+Option
+Description
+GStreamer Multimedia Codecs
+Microsoft fonts
+General Compiz Fusion Effects
+Emesene [instant messaging]
+Amsn [instant messaging]
+Vlc [Video Player]
+Mplayer [Video Player]
+RAR [Support for unpacking RAR files]
+Inkscape [handle graphics]
+Banshee [Music Player]
+Xchat [IRC client]
+GIMP [edit pictures]
