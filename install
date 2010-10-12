@@ -78,6 +78,9 @@ fc-cache
 #Efectos Generales Compiz Fusion
 sudo apt-get install compizconfig-settings-manager
 
+#Efectos avanzados para elcompiz
+sudo apt-get install compiz-fusion-plugins-extra
+
 #Emesene [ mensajería instantánea ]
 apt-get install emesene
 
