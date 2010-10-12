@@ -7,7 +7,30 @@
 #basado en: "Lo Basico Despues de instalar Ubuntu 10.10"
 #		http://www.nierox.com/2010/10/lo-basico-despues-de-instalar-ubuntu-10-10/
 #
+#
 
+################################################################
+#funciones a utilizar ##################################################
+########################################################################
+function installPack {
+		echo "install $1"
+		echo "apt-get --force-yes -y build-dep $1"
+		apt-get --force-yes -y build-dep $1
+		echo "apt-get --force-yes -y install $1"
+		apt-get --force-yes -y install $1
+}
+#--------------
+function installGStreamer {
+	#echo hola mundo
+	pack=faad\
+\	gstreamer0.10-ffmpeg\
+\	gstreamer0.10-plugins-bad\
+\	gstreamer0.10-plugins-bad-multiverse\
+\	gstreamer0.10-plugins-ugly\
+\	gstreamer0.10-plugins-ugly-multiverse\
+\	gstreamer0.10-pitfdll
+	installPack $pack
+}
 
 #seleción de idioma
 langselect=`zenity --title="Seleccione su idioma" --width=370 --height=180 \
@@ -15,6 +38,7 @@ langselect=`zenity --title="Seleccione su idioma" --width=370 --height=180 \
                             --list --column="Selected" --column="Language" \
                             --radiolist TRUE Spanish FALSE English `
 
+#Cargamos en L18N la idiomaseleccionada apartir de su respectivo archivo
 if [ $? -eq 0 ];
 then
         IFS="|"
@@ -42,11 +66,6 @@ while read curline; do
 	let n=n+1
 done < $YOURLANG
 
-choicess=`/usr/bin/zenity --title="$I18N1" --width=500 --height=450 \
-                          --text="$I18N5" \
-                         --list --column="$I18N6" --column="$I18N7" \
-                         --checklist TRUE "$I18N8" TRUE "$I18N9" TRUE "$I18N10" TRUE "$I18N11" TRUE "$I18N12" TRUE "$I18N13" TRUE "$I18N14" TRUE "$I18N15" TRUE "$I18N16" TRUE "$I18N17" TRUE "$I18N18" TRUE "$I18N19" `
-
 #Requiere de una conexion a internet para poder continuar, intentamos acceder a google con wget
 testconnection=`wget --tries=3 --timeout=15 www.google.com -O /tmp/testinternet &>/dev/null 2>&1`
 if [ $? != 0 ];
@@ -64,21 +83,47 @@ then
 fi
 
 
-##### Lo demas son puros installs a partir de las opciones:
-#esto se instala x defecto?
-aptitude install build-essential
+###--------------------------------------------------------------------
+choices=`/usr/bin/zenity --title="$I18N1" --width=500 --height=450 \
+                          --text="$I18N5" \
+                         --list --column="$I18N6" --column="$I18N7" \
+                         --checklist TRUE "$I18N8" FALSE "$I18N9" FALSE "$I18N10" FALSE "$I18N11" FALSE "$I18N12" FALSE "$I18N13" FALSE "$I18N14" FALSE "$I18N15" FALSE "$I18N16" FALSE "$I18N17" FALSE "$I18N18" FALSE "$I18N19" `
 
-#Codecs Multimedia GStreamer
-apt-get install faad gstreamer0.10-ffmpeg gstreamer0.10-plugins-bad gstreamer0.10-plugins-bad-multiverse gstreamer0.10-plugins-ugly gstreamer0.10-plugins-ugly-multiverse gstreamer0.10-pitfdll
 
-#Fuentes de Microsoft
-apt-get install msttcorefonts
-fc-cache
+#Cachando e instalando solo las opciones q el usario haya elegido
+#Existen distintas formas de cachado, esta se basa del echo q exista deteminada
+#palabra en las opciones ($choices) la cual sera una especie de clave, 
+#OjO esta palabras clave tendran q aparecer en todas las idiomas
+echo $choices;
+echo "--------------------------"
+
+op=`echo $choices | grep -o gStreamer`
+if [ $? == 0 ];
+then
+	#Codecs Multimedia GStreamer
+	echo Codecs Multimedia GStreamer
+	installGStreamer
+fi
+op=`echo $choices | grep -o msttcorefonts`
+if [ $? == 0 ];
+then
+	#Codecs Multimedia GStreamer
+	installPack msttcorefonts
+	fc-cache
+fi
+#aqui deben de continuar las demas opciones...
+#.............
+
+#Aqui deberia de acabar el script
+exit 0
+
+################################ opciones todavia no implementada ##############################################
+#################################################################################################################
 
 #Efectos Generales Compiz Fusion
 sudo apt-get install compizconfig-settings-manager
 
-#Efectos avanzados para elcompiz
+#Efectos extras para elcompiz
 sudo apt-get install compiz-fusion-plugins-extra
 
 #Emesene [ mensajería instantánea ]
@@ -107,3 +152,4 @@ apt-get install xchat
 
 #GIMP [ edito de imagenes ]
 apt-get install gimp
+
